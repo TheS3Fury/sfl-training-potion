@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- SEO Primary Meta Tags -->
+  <title>Sunflower Land Potion Room Simulator & Helper | SFL Tools</title>
+  <meta name="description" content="Free online Sunflower Land Potion Room Simulator. Practice and master the SFL Potion House puzzle mechanics to optimize your gameplay and protect your coins!">
+  <meta name="keywords" content="Sunflower Land, SFL, Potion Room, Potion House, SFL Simulator, Web3 Gaming, SFL Helper, Potion Solver">
+  <meta name="author" content="Quality In Animation">
+
+  <!-- Open Graph / Social Media Meta Tags -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Sunflower Land Potion Room Simulator">
+  <meta property="og:description" content="Practice and master the SFL Potion House puzzle mechanics for Sunflower Land. Test your potion mixing skills for free and avoid wasting coins!">
+  <meta property="og:site_name" content="SFL Training Potion">
+
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #2c1d11;
+      color: #e5c9a5;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+    /* Gaya untuk Teks Sambutan di atas */
+    .site-header {
+      text-align: center;
+      max-width: 420px;
+      margin-bottom: 12px;
+    }
+    .site-header h1 {
+      font-size: 1.4rem;
+      color: #ffb74d;
+      margin-bottom: 6px;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+    }
+    .site-header p {
+      font-size: 0.85rem;
+      color: #d7ccc8;
+      line-height: 1.4;
+      margin: 0;
+    }
+
+    /* Kotak Quick Guide di Atas */
+    .guide-box-top {
+      background-color: #3e2723;
+      border: 2px solid #6b4226;
+      border-radius: 8px;
+      padding: 10px 15px;
+      width: 320px;
+      box-sizing: border-box;
+      margin-bottom: 12px;
+      font-size: 0.8rem;
+      color: #d7ccc8;
+    }
+    .guide-box-top h3 {
+      font-size: 0.85rem;
+      color: #ffb74d;
+      margin: 0 0 6px 0;
+      text-align: center;
+    }
+    .guide-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 4px;
+    }
+    .mini-badge {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: bold;
+      color: white;
+      flex-shrink: 0;
+    }
+    .badge-correct { background-color: #2e7d32; }
+    .badge-partial { background-color: #f57c00; }
+    .badge-incorrect { background-color: #c62828; }
+
+    /* Kotak Statistik Latihan */
+    .stats-box {
+      display: flex;
+      gap: 15px;
+      background-color: #3e2723;
+      border: 2px solid #6b4226;
+      border-radius: 8px;
+      padding: 8px 15px;
+      margin-bottom: 15px;
+      font-size: 0.8rem;
+      color: #ffcc80;
+    }
+    .stat-item {
+      text-align: center;
+    }
+    .stat-item span {
+      display: block;
+      font-weight: bold;
+      font-size: 1rem;
+      color: #fff;
+    }
+
+    /* Gaya Kotak Game Utama */
+    .modal {
+      background-color: #e5c9a5;
+      border: 4px solid #6b4226;
+      border-radius: 12px;
+      padding: 20px;
+      width: 320px;
+      color: #4a3b32;
+      box-shadow: 0 8px 0 #1f140b, 0 15px 20px rgba(0,0,0,0.5);
+    }
+    .title {
+      text-align: center;
+      color: #6b4226;
+      font-weight: bold;
+      font-size: 1.3rem;
+      margin-bottom: 10px;
+      text-shadow: 1px 1px 0px #fff;
+    }
+    .plant-box {
+      background-color: #cbb08a;
+      border: 2px solid #8c6239;
+      border-radius: 8px;
+      padding: 10px;
+      text-align: center;
+      margin-bottom: 12px;
+    }
+    .plant-icon {
+      font-size: 2rem;
+    }
+    .attempts-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      background-color: #cbb08a;
+      padding: 12px;
+      border-radius: 8px;
+      border: 2px solid #8c6239;
+      margin-bottom: 15px;
+    }
+    .row {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+    }
+    .slot {
+      width: 50px;
+      height: 50px;
+      border: 2px solid #8c6239;
+      border-radius: 8px;
+      background-color: #e0d0b8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    .slot.active {
+      border: 3px solid #ffca28;
+    }
+    .potion-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 2px solid rgba(0,0,0,0.3);
+      box-shadow: inset -2px -2px 4px rgba(0,0,0,0.4);
+    }
+    .feedback-badge {
+      position: absolute;
+      top: -6px;
+      right: -6px;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: bold;
+      color: white;
+      border: 1px solid #fff;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .mix-btn {
+      width: 100%;
+      padding: 10px;
+      background-color: #d7ccc8;
+      color: #8d6e63;
+      border: 2px solid #a1887f;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: not-allowed;
+      margin-bottom: 15px;
+    }
+    .mix-btn.ready {
+      background-color: #ffb74d;
+      color: #5d4037;
+      border: 2px solid #e65100;
+      cursor: pointer;
+    }
+    .potions-label {
+      font-size: 0.85rem;
+      font-weight: bold;
+      color: #5d4037;
+      margin-bottom: 8px;
+    }
+    .potion-selector {
+      display: flex;
+      gap: 6px;
+      justify-content: space-between;
+      background-color: #cbb08a;
+      padding: 8px;
+      border-radius: 8px;
+      border: 2px solid #8c6239;
+      min-height: 36px;
+    }
+    .select-potion {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 2px solid #fff;
+      cursor: pointer;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+      transition: transform 0.1s;
+    }
+    .select-potion:hover {
+      transform: scale(1.15);
+    }
+    .status-msg {
+      text-align: center;
+      font-weight: bold;
+      color: #4e342e;
+      margin-top: 10px;
+    }
+    .reset-btn {
+      width: 100%;
+      margin-top: 10px;
+      padding: 8px;
+      background: #8c6239;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    /* Bagian Bawah: Pemutar Musik Spotify Saja */
+    .spotify-section {
+      margin-top: 20px;
+      background-color: #3e2723;
+      border: 2px solid #6b4226;
+      border-radius: 8px;
+      padding: 15px;
+      width: 320px;
+      box-sizing: border-box;
+      font-size: 0.8rem;
+      color: #d7ccc8;
+      text-align: center;
+    }
+    .spotify-section p {
+      font-size: 0.78rem;
+      color: #ffcc80;
+      margin: 0 0 8px 0;
+      line-height: 1.3;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Bagian Teks Sambutan -->
+  <header class="site-header">
+    <h1>SFL Potion Room Trainer</h1>
+    <p>Welcome, Farmers! Practice your Potion House puzzle strategies here for free. Master the color combinations before you risk your hard-earned SFL coins in the game!</p>
+  </header>
+
+  <!-- Quick Guide Dipindah ke Atas (Sebelum Win Rate / Stats) -->
+  <div class="guide-box-top">
+    <h3>📖 Quick Guide</h3>
+    <div class="guide-item"><div class="mini-badge badge-correct">✓</div> Correct color and position.</div>
+    <div class="guide-item"><div class="mini-badge badge-partial">?</div> Correct color, wrong position.</div>
+    <div class="guide-item"><div class="mini-badge badge-incorrect">✕</div> Incorrect color.</div>
+  </div>
+
+  <!-- Kotak Statistik Latihan -->
+  <div class="stats-box">
+    <div class="stat-item">Played <span id="statPlayed">0</span></div>
+    <div class="stat-item">Wins <span id="statWins">0</span></div>
+    <div class="stat-item">Win Rate <span id="statRate">0%</span></div>
+  </div>
+
+  <!-- Bagian Game Simulator -->
+  <div class="modal">
+    <div class="title">🧪 Potion Room</div>
+
+    <div class="plant-box">
+      <div class="plant-icon" id="plantState">🪴</div>
+      <small id="winMsg">Potion Experiment</small>
+    </div>
+
+    <div class="attempts-grid">
+      <div class="row" id="row-2">
+        <div class="slot" id="slot-2-0"></div>
+        <div class="slot" id="slot-2-1"></div>
+        <div class="slot" id="slot-2-2"></div>
+        <div class="slot" id="slot-2-3"></div>
+      </div>
+      <div class="row" id="row-1">
+        <div class="slot" id="slot-1-0"></div>
+        <div class="slot" id="slot-1-1"></div>
+        <div class="slot" id="slot-1-2"></div>
+        <div class="slot" id="slot-1-3"></div>
+      </div>
+      <div class="row" id="row-0">
+        <div class="slot" id="slot-0-0"></div>
+        <div class="slot" id="slot-0-1"></div>
+        <div class="slot" id="slot-0-2"></div>
+        <div class="slot" id="slot-0-3"></div>
+      </div>
+    </div>
+
+    <button class="mix-btn" id="mixBtn" onclick="mixPotion()">Mix Potion</button>
+
+    <div class="potions-label">Potions</div>
+    <div class="potion-selector" id="potionPicker"></div>
+
+    <div class="status-msg" id="statusMsg">Turn: Row 1/3</div>
+    <button class="reset-btn" onclick="initGame()">Play Again</button>
+  </div>
+
+  <!-- Bagian Bawah: Hanya Pemutar Musik Spotify -->
+  <div class="spotify-section">
+    <p>🎵 <strong>Good tunes for good grind:</strong> A special playlist curated for crypto farmers and Web3 gamers. Hit play and vibe out!</p>
+    <iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/playlist/2JUeG1A62vm5K4iVEWp07H?utm_source=generator&si=56c93306acb9498a" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+  </div>
+
+  <script>
+    const POTION_COLORS = [
+      '#e65100', // Orange
+      '#ffee58', // Yellow
+      '#f48fb1', // Pink
+      '#37474f', // Black
+      '#eceff1', // White
+      '#1e88e5', // Blue
+      '#43a047'  // Green
+    ];
+
+    let secretCode = [];
+    let currentRow = 0;
+    let currentSlot = 0;
+    let guesses = [[null, null, null, null], [null, null, null, null], [null, null, null, null]];
+    let isGameOver = false;
+
+    let totalPlayed = 0;
+    let totalWins = 0;
+
+    function initGame() {
+      secretCode = [];
+      for (let i = 0; i < 4; i++) {
+        secretCode.push(POTION_COLORS[Math.floor(Math.random() * POTION_COLORS.length)]);
+      }
+
+      currentRow = 0;
+      currentSlot = 0;
+      guesses = [[null, null, null, null], [null, null, null, null], [null, null, null, null]];
+      isGameOver = false;
+
+      document.getElementById('plantState').innerText = '🪴';
+      document.getElementById('winMsg').innerText = 'Potion Experiment';
+
+      for (let r = 0; r < 3; r++) {
+        for (let s = 0; s < 4; s++) {
+          const slot = document.getElementById(`slot-${r}-${s}`);
+          slot.innerHTML = '';
+          slot.classList.remove('active');
+        }
+      }
+
+      renderPotionPicker();
+      updateUI();
+    }
+
+    function renderPotionPicker() {
+      const picker = document.getElementById('potionPicker');
+      picker.innerHTML = '';
+      POTION_COLORS.forEach(color => {
+        const btn = document.createElement('div');
+        btn.className = 'select-potion';
+        btn.style.backgroundColor = color;
+        btn.onclick = () => addPotionToSlot(color);
+        picker.appendChild(btn);
+      });
+    }
+
+    function addPotionToSlot(color) {
+      if (isGameOver || currentSlot >= 4) return;
+
+      guesses[currentRow][currentSlot] = color;
+      
+      const slot = document.getElementById(`slot-${currentRow}-${currentSlot}`);
+      slot.innerHTML = `<div class="potion-icon" style="background-color: ${color}"></div>`;
+      
+      currentSlot++;
+      updateUI();
+    }
+
+    function updateUI() {
+      for (let r = 0; r < 3; r++) {
+        for (let s = 0; s < 4; s++) {
+          const slot = document.getElementById(`slot-${r}-${s}`);
+          if (r === currentRow && s === currentSlot && !isGameOver && currentSlot < 4) {
+            slot.classList.add('active');
+          } else {
+            slot.classList.remove('active');
+          }
+        }
+      }
+
+      const mixBtn = document.getElementById('mixBtn');
+      if (currentSlot === 4 && !isGameOver) {
+        mixBtn.classList.add('ready');
+      } else {
+        mixBtn.classList.remove('ready');
+      }
+
+      if (!isGameOver) {
+        document.getElementById('statusMsg').innerText = `Turn: Row ${currentRow + 1}/3`;
+      }
+    }
+
+    function mixPotion() {
+      if (currentSlot < 4 || isGameOver) return;
+
+      const currentGuess = guesses[currentRow];
+      const feedback = evaluateGuess(currentGuess, secretCode);
+      let correctCount = 0;
+
+      for (let i = 0; i < 4; i++) {
+        const slot = document.getElementById(`slot-${currentRow}-${i}`);
+        const status = feedback[i];
+
+        const badge = document.createElement('div');
+        badge.className = `feedback-badge badge-${status}`;
+        
+        if (status === 'correct') {
+          badge.innerText = '✓';
+          correctCount++;
+        } else if (status === 'partial') {
+          badge.innerText = '?';
+        } else {
+          badge.innerText = '✕';
+        }
+
+        slot.appendChild(badge);
+      }
+
+      if (correctCount === 4) {
+        document.getElementById('statusMsg').innerText = '🎉 You won 25 points!';
+        document.getElementById('plantState').innerText = '🌿✨';
+        document.getElementById('winMsg').innerText = 'Magnificent! Your skills brought the plant to life!';
+        isGameOver = true;
+        totalPlayed++;
+        totalWins++;
+        updateStats();
+      } else if (currentRow === 2) {
+        document.getElementById('statusMsg').innerText = '❌ Failed! Out of attempts.';
+        isGameOver = true;
+        totalPlayed++;
+        updateStats();
+      } else {
+        currentRow++;
+        currentSlot = 0;
+      }
+
+      updateUI();
+    }
+
+    function updateStats() {
+      document.getElementById('statPlayed').innerText = totalPlayed;
+      document.getElementById('statWins').innerText = totalWins;
+      let rate = totalPlayed > 0 ? Math.round((totalWins / totalPlayed) * 100) : 0;
+      document.getElementById('statRate').innerText = rate + '%';
+    }
+
+    function evaluateGuess(guess, code) {
+      let result = Array(4).fill('incorrect');
+      let codeCopy = [...code];
+      let guessCopy = [...guess];
+
+      for (let i = 0; i < 4; i++) {
+        if (guessCopy[i] === codeCopy[i]) {
+          result[i] = 'correct';
+          codeCopy[i] = null;
+          guessCopy[i] = null;
+        }
+      }
+
+      for (let i = 0; i < 4; i++) {
+        if (guessCopy[i] !== null) {
+          const matchIndex = codeCopy.indexOf(guessCopy[i]);
+          if (matchIndex !== -1) {
+            result[i] = 'partial';
+            codeCopy[matchIndex] = null;
+          }
+        }
+      }
+
+      return result;
+    }
+
+    window.onload = initGame;
+  </script>
+</body>
+</html>
